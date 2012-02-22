@@ -1,0 +1,19 @@
+{
+  "author": "Hidetomo Morimoto <mocchidesu@gmail.com> (http://github.com/mocchidesu/simple_chat)",
+  "name": "mysamplechat",
+  "version": "v0.0.1",
+  "description": "My first attempt to create node.js application. Use WebSocekt(socket.io)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mocchidesu"
+  },
+  "engines": {
+    "node": "0.6.11"
+  },
+  "dependencies": {
+    "socket.io": "0.8.7"
+  },
+  "devDependencies": {},
+  "private": true
+}
+

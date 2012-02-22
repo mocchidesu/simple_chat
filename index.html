@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+<head>
+<title>Sample Chat</title>
+<style>
+body{
+        width:600px;
+        margin:auto;
+        font-family: sans-serif;
+        padding: 1em;
+        background: #46483E;
+}
+#flashmsg{
+        background:#e3e3e3;
+        font-weight:bold;
+        display:none;
+        font-size:60px;
+}
+#history{
+        width:600px;
+        height:300px;
+        background:#f0f0f0;
+        overflow:scroll;
+}
+#history i{
+        font-size: 12px;
+}
+#history span{
+        display: block;
+        padding: 2px;
+        background-color: white;
+}
+#history span:first-child{
+        background-color: yellow;
+}
+
+#formdiv{
+
+}
+</style>
+<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+<h1>Simple Sample Chat Room</h1>
+<!-- Show Message in Slide animation (slideToggle) -->
+<div id="flashmsg"></div>
+<!-- Show Message history -->
+<div id="history"></div>
+<!-- Chat form -->
+<div id="formdiv"><form id="msgform">
+        <input type="text" size=10 id="username" value="user">
+        <input type="text" size=30 id="msg">
+        <input type="submit" value="Add Message" id="addmsg">
+</form></div>
+<script>
+var serverip = "192.168.0.79";
+var serverport = 3000;
+var socket = null;
+function setupSocket(){
+  socket = io.connect(serverip, {"port": serverport});
+  socket.on("connect", function(){
+    console.log('connected');
+  });
+
+  socket.on('message', function(data){
+     console.log(data);
+     showMsg(data);
+   });
+
+  socket.on('disconnect', function(){
+     console.log("client disconnected");
+  });
+}
+
+$(document).ready(function(){
+   setupSocket();
+   $("#msg").val('').focus();
+   $("#formdiv").submit(function(e){
+     e.preventDefault();
+     var m = $("#msg").val();
+     var u = $("#username").val();
+     if(socket && m){
+        console.log("socket exist");
+        socket.send(u + ": " + m);
+        console.log('sent: ' + m);
+     }else{
+        console.log("socket not exist or invalid string");
+     }
+     $("#msg").val('').focus();
+   });
+});
+
+var showMsg = function(message){
+   $("div#flashmsg").html(message).slideToggle(300).slideToggle(300);
+   var spantag = document.createElement("span");
+   $(spantag).html("<i>"+ formatDate( new Date())  + ": " + message + "</i>");
+   $("#history").prepend(spantag);
+}
+
+function formatDate(value){
+  return value.getHours() + ":" + value.getMinutes() + "," +  value.getMonth()+1 + "/" + value.getDate();
+}
+
+</script>
+</body>
+</html>
