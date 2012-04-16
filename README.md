@@ -1,4 +1,4 @@
-# Sample Chat: simplest chat application with Node.js and WebSocket.
+# Sample Chat: Simplest chat application with Node.js and WebSocket.
 
 ## Note
 
